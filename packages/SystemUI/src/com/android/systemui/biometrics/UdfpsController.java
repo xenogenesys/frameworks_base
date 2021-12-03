@@ -37,6 +37,7 @@ import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.hardware.biometrics.BiometricFingerprintConstants;
 import android.hardware.biometrics.SensorProperties;
+import android.hardware.display.ColorDisplayManager;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.hardware.fingerprint.FingerprintSensorProperties;
@@ -234,6 +235,10 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private boolean mSmartPixelsEnabled;
     private boolean mSmartPixelsOnPowerSave;
 
+    private boolean mDisableNightMode;
+    private boolean mNightModeActive;
+    private int mAutoModeState;
+
     @VisibleForTesting
     public static final VibrationAttributes UDFPS_VIBRATION_ATTRIBUTES =
             new VibrationAttributes.Builder()
@@ -284,6 +289,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         @Override
         public void showUdfpsOverlay(long requestId, int sensorId, int reason,
                 @NonNull IUdfpsOverlayControllerCallback callback) {
+            if (mDisableNightMode) {
+                disableNightMode();
+            }
             mFgExecutor.execute(() -> UdfpsController.this.showUdfpsOverlay(
                     new UdfpsControllerOverlay(
                         mContext,
@@ -321,6 +329,9 @@ public class UdfpsController implements DozeReceiver, Dumpable {
 
         @Override
         public void hideUdfpsOverlay(int sensorId) {
+            if (mDisableNightMode) {
+                setNightMode(mNightModeActive, mAutoModeState);
+            }
             mFgExecutor.execute(() -> {
                 if (mKeyguardUpdateMonitor.isFingerprintDetectionRunning()) {
                     // if we get here, we expect keyguardUpdateMonitor's fingerprintRunningState
@@ -783,26 +794,30 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         udfpsHapticsSimulator.setUdfpsController(this);
         udfpsShell.setUdfpsOverlayController(mUdfpsOverlayController);
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfpsVendorCode);
-        mDisableSmartPixels = mContext.getResources().getBoolean(R.bool.config_disableSmartPixelsOnUDFPS);
-        boolean screenOffFodSupported = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_supportScreenOffUdfps) ||
-                !TextUtils.isEmpty(mContext.getResources().getString(
-                    com.android.internal.R.string.config_dozeUdfpsLongPressSensorType));
-        if (screenOffFodSupported) {
-            mScreenOffFod = Settings.Secure.getIntForUser(context.getContentResolver(),
-                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
-            mContext.getContentResolver().registerContentObserver(
-                Settings.Secure.getUriFor(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED), false,
-                new ContentObserver(mainHandler) {
-                    @Override
-                    public void onChange(boolean selfChange, Uri uri) {
-                        if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
-                            mScreenOffFod = Settings.Secure.getIntForUser(context.getContentResolver(),
-                                Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+
+        if (mKeyguardUpdateMonitor.isUdfpsSupported()) {
+            mDisableSmartPixels = mContext.getResources().getBoolean(R.bool.config_disableSmartPixelsOnUDFPS);
+            mDisableNightMode = true;
+            boolean screenOffFodSupported = mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_supportScreenOffUdfps) ||
+                    !TextUtils.isEmpty(mContext.getResources().getString(
+                        com.android.internal.R.string.config_dozeUdfpsLongPressSensorType));
+            if (screenOffFodSupported) {
+                mScreenOffFod = Settings.Secure.getIntForUser(context.getContentResolver(),
+                    Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+                mContext.getContentResolver().registerContentObserver(
+                    Settings.Secure.getUriFor(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED), false,
+                    new ContentObserver(mainHandler) {
+                        @Override
+                        public void onChange(boolean selfChange, Uri uri) {
+                            if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
+                                mScreenOffFod = Settings.Secure.getIntForUser(context.getContentResolver(),
+                                    Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+                            }
                         }
-                    }
-                }, UserHandle.USER_ALL
-            );
+                    }, UserHandle.USER_ALL
+                );
+            }
         }
 
         if (com.android.internal.util.crdroid.Utils.isPackageInstalled(mContext,
@@ -849,6 +864,23 @@ public class UdfpsController implements DozeReceiver, Dumpable {
             Settings.System.putIntForUser(mContext.getContentResolver(),
                     Settings.System.SMART_PIXELS_ON_POWER_SAVE,
                     1, UserHandle.USER_CURRENT);
+        }
+    }
+
+    private void disableNightMode() {
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        mAutoModeState = colorDisplayManager.getNightDisplayAutoMode();
+        mNightModeActive = colorDisplayManager.isNightDisplayActivated();
+        colorDisplayManager.setNightDisplayActivated(false);
+    }
+
+    private void setNightMode(boolean activated, int autoMode) {
+        ColorDisplayManager colorDisplayManager = mContext.getSystemService(ColorDisplayManager.class);
+        colorDisplayManager.setNightDisplayAutoMode(0);
+        if (autoMode == 0) {
+            colorDisplayManager.setNightDisplayActivated(activated);
+        } else if (autoMode == 1 || autoMode == 2) {
+            colorDisplayManager.setNightDisplayAutoMode(autoMode);
         }
     }
 
