@@ -80,5 +80,27 @@
     <java-symbol type="string" name="config_batterymeterLandBoltPathOrigami" />
     <java-symbol type="string" name="config_batterymeterLandPowersavePathOrigami" />
     <java-symbol type="string" name="config_batterymeterLandErrorPerimeterPathOrigami" />
+    <java-symbol type="string" name="config_batterymeterLandPerimeterPathMiUIPill" />
+    <java-symbol type="string" name="config_batterymeterLandFillMaskMiUIPill" />
+    <java-symbol type="string" name="config_batterymeterLandBoltPathMiUIPill" />
+    <java-symbol type="string" name="config_batterymeterLandPowersavePathMiUIPill" />
+    <java-symbol type="string" name="config_batterymeterLandErrorPerimeterPathMiUIPill" />
+
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_signal" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_line" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_pill_musku" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_buddy" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_ios15" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_ios16" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_origami" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_width_landscape_miui_pill" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_signal" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_line" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_pill_musku" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_buddy" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_ios15" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_ios16" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_origami" />
+    <java-symbol type="dimen" name="status_bar_battery_icon_height_landscape_miui_pill" />
 
 </resources>
