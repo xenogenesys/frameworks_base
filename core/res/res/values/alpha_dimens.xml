@@ -20,6 +20,7 @@
 <resources>
 
      <!-- More battery styles -->
+     <dimen name="status_bar_battery_icon_big_circle_width">20.5dp</dimen>
      <dimen name="status_bar_battery_icon_width_landscape_signal">16.0dip</dimen>
      <dimen name="status_bar_battery_icon_width_landscape_line">22.0dip</dimen>
      <dimen name="status_bar_battery_icon_width_landscape_pill_musku">13dp</dimen>

@@ -146,6 +146,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
     private int mBatteryStyle = BATTERY_STYLE_PORTRAIT;
     private int mShowBatteryPercent;
     private boolean mBatteryPercentCharging;
+    private boolean mCharging;
 
     private DualToneHandler mDualToneHandler;
     private boolean mIsStaticColor = false;
@@ -646,8 +647,9 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 break;
             case BATTERY_STYLE_BIG_CIRCLE:
             case BATTERY_STYLE_BIG_DOTTED_CIRCLE:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_big_circle_height);
-                batteryWidth = batteryHeight;
+                batteryWidth = res.getDimensionPixelSize(
+                        com.android.internal.R.dimen.status_bar_battery_icon_big_circle_width);
+                batteryHeight = batteryWidth;
                 break;
             case BATTERY_STYLE_LANDSCAPE:
             case BATTERY_STYLE_RLANDSCAPE:
@@ -659,37 +661,53 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape);
                 break;
             case BATTERY_STYLE_LANDSCAPE_SIGNAL:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_signal);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_signal);
+                batteryHeight = res.getDimensionPixelSize(
+                        com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_signal);
+                batteryWidth = res.getDimensionPixelSize(
+                        com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_signal);
                 break;
             case BATTERY_STYLE_LANDSCAPE_LINE:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_line);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_line);
+                batteryHeight = res.getDimensionPixelSize(
+                        com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_line);
+                batteryWidth = res.getDimensionPixelSize(
+                        com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_line);
                 break;
             case BATTERY_STYLE_LANDSCAPE_PILL:
             case BATTERY_STYLE_LANDSCAPE_MUSKU:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_pill_musku);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_pill_musku);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_pill_musku);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_pill_musku);
                 break;
             case  BATTERY_STYLE_LANDSCAPE_BUDDY:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_buddy);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_buddy);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_buddy);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_buddy);
                 break;
             case BATTERY_STYLE_LANDSCAPE_IOS15:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_ios15);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_ios15);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_ios15);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_ios15);
                 break;
             case BATTERY_STYLE_LANDSCAPE_IOS16:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_ios16);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_ios16);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_ios16);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_ios16);
                 break;
             case BATTERY_STYLE_LANDSCAPE_ORIGAMI:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_origami);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_origami);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_origami);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_origami);
                 break;
             case BATTERY_STYLE_LANDSCAPE_MIUI_PILL:
-                batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height_landscape_miui_pill);
-                batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width_landscape_miui_pill);
+                batteryHeight = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_height_landscape_miui_pill);
+                batteryWidth = res.getDimensionPixelSize(
+                       com.android.internal.R.dimen.status_bar_battery_icon_width_landscape_miui_pill);
                 break;
             default:
                 batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height);
